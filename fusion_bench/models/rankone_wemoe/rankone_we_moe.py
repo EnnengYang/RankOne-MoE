@@ -377,10 +377,10 @@ class RankOneWeightEnsemblingMoE(nn.Module):
                     result = torch.matmul(weight_u.T, svh)
                     state_dict[name] = state_dict[name] + result
 
-                # state_dict[name] += self.merge_weights_optimized(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh)
-
                 # for weight, u, svh in zip(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh):
                 #     state_dict[name] = state_dict[name] + weight * torch.ger(u, svh)
+
+                # state_dict[name] += self.merge_weights_optimized(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh)
 
                 # aggregated_weights = torch.zeros_like(state_dict[name])  # (3072, 768)
                 # for weight, u, svh in zip(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh):
@@ -397,10 +397,10 @@ class RankOneWeightEnsemblingMoE(nn.Module):
                     result = torch.matmul(weight_u.T, svh)
                     state_dict[name] = state_dict[name] + result
 
-                # state_dict[name] += self.merge_weights_optimized(expert_weights, self.task_vectors_fc2_u,  self.task_vectors_fc2_svh)
-
                 # for weight, u, svh in zip(expert_weights, self.task_vectors_fc2_u, self.task_vectors_fc2_svh):
                 #     state_dict[name] = state_dict[name] + weight * torch.ger(u, svh)
+
+                # state_dict[name] += self.merge_weights_optimized(expert_weights, self.task_vectors_fc2_u,  self.task_vectors_fc2_svh)
 
                 # aggregated_weights = torch.zeros_like(state_dict[name])  # (3072, 768)
                 # for weight, u, svh in zip(expert_weights, self.task_vectors_fc2_u, self.task_vectors_fc2_svh):

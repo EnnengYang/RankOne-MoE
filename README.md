@@ -31,26 +31,26 @@ pip install -e . # install the package in editable mode
 ```bash
 bash examples/rankone_weone/rankone_wemoe_gridsearch.sh
 ```
-> ViT-B/32的运行结果在[results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
+> ViT-B/32的运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
 
-> ViT-B/16的运行结果在[results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
+> ViT-B/16的运行结果在[examples/results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
 
-> ViT-L/14的运行结果在[results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
+> ViT-L/14的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
 
 - 实验：基线方法们在CLIP-ViT-B/32模型下的合并性能
 ```bash
 bash examples/rankone_weone/baseline_b32.sh
 ```
-> 运行结果在[results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
+> 运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
 
 - 实验：基线方法们在CLIP-ViT-B/16模型下的合并性能
 ```bash
 bash examples/rankone_weone/baseline_b16.sh
 ```
->  ViT-B/16的运行结果在[results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
+>  ViT-B/16的运行结果在[examples/results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
 
 - 实验：基线方法们在CLIP-ViT-L/14模型下的合并性能
 ```bash
 bash examples/rankone_weone/baseline_l14.sh
 ```
-> ViT-L/14的运行结果在[results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
+> ViT-L/14的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)

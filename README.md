@@ -1,4 +1,4 @@
-# "秩一专家混合用于多任务学习"的代码
+# "秩一专家混合用于多任务学习"
 
 ## 开发环境配置
 本项目依赖于[FusionBench-v0.2.4](https://github.com/tanganke/fusion_bench)，可参考该库来配置基本环境，主要步骤如下：
@@ -13,7 +13,7 @@ conda create --name fusionbench python=3.12.4
 conda activate fusionbench
 ```
 
-第三步：安装本项目的开发环境
+第三步：安装本项目的依赖的环境
 ```bash
 git clone https://github.com/EnnengYang/RankOne-WEMoE
 cd RankOne-WEMoE
@@ -22,9 +22,9 @@ pip install -e . # install the package in editable mode
 ```
 
 
-## 运行
+## 运行实验
 
-> 注意：本项目涉及到的所有数据集和模型权重均可在代码允许时自动下载，请确保您的网络能访问[huggingface](https://huggingface.co/)网站，或者可以考虑手动下载[相关资源](https://huhuggingface.co/tanganke).
+> 注意：本项目涉及到的所有数据集和模型权重均可在代码运行时自动下载，请确保您的网络能访问[huggingface](https://huggingface.co/)网站，您也可以考虑手动下载[相关资源](https://huhuggingface.co/tanganke).
 
 
 - 实验：我们的RankOne-MoE方法在CLIP-ViT-B/32, CLIP-ViT-B/16, CLIP-ViT-L/14模型下的合并性能

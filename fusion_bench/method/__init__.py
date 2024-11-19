@@ -7,7 +7,6 @@ from fusion_bench.utils.lazy_imports import LazyImporter
 _import_structure = {
     # develop
     "rankone_upscaling": ["RankOneUpscalingAlgorithm"],
-    "rankone_wemoe": ["CLIPRankOneWeightEnsemblingMoEAlgorithm"],
     # --------------
     "base_algorithm": ["BaseModelFusionAlgorithm", "BaseAlgorithm"],
     "dummy": ["DummyAlgorithm"],
@@ -24,6 +23,7 @@ _import_structure = {
     # model merging methods
     "linear": [
         "ExPOAlgorithm",
+        "ExPOAlgorithmForLlama",
         "SimpleAverageForLlama",
         "TaskArithmeticForLlama",
         "LinearInterpolationAlgorithm",
@@ -88,13 +88,6 @@ _import_structure = {
 
 
 if TYPE_CHECKING:
-    # develop
-    from .rankone_upscaling import RankOneUpscalingAlgorithm
-    from .rankone_wemoe import (
-        CLIPRankOneWeightEnsemblingMoEAlgorithm,
-        RankOneWeightEnsemblingMoEAlgorithm
-    )
-    # --------------
     from .ada_svd import AdaSVDMergingForCLIPVisionModel
     from .analysis import TaskVectorCosSimilarity, TaskVectorViolinPlot
     from .base_algorithm import BaseAlgorithm, BaseModelFusionAlgorithm
@@ -116,6 +109,7 @@ if TYPE_CHECKING:
     from .fisher_merging import FisherMergingForCLIPVisionModel
     from .linear import (
         ExPOAlgorithm,
+        ExPOAlgorithmForLlama,
         LinearInterpolationAlgorithm,
         SimpleAverageForLlama,
         TaskArithmeticForLlama,

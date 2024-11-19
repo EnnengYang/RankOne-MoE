@@ -1,0 +1,39 @@
+fusion_bench method=adamerging method.name=clip_layer_wise_adamerging fast_dev_run=false modelpool=CLIPVisionModelPool/clip-vit-base-patch32_TA8 taskpool=CLIPVisionModelTaskPool/clip-vit-classification_TA8
+----------------------------------------------------------------------------------------------------------------------------------
+|  Action                     	|  Mean duration (s)	|  Num calls      	|  Total time (s) 	|  Percentage %   	|
+----------------------------------------------------------------------------------------------------------------------------------
+|  Total                      	|  -              	|  26001          	|  602.71         	|  100 %          	|
+----------------------------------------------------------------------------------------------------------------------------------
+|  backward pass              	|  0.043683       	|  8000           	|  349.46         	|  57.982         	|
+|  data loading               	|  0.015145       	|  8000           	|  121.16         	|  20.102         	|
+|  forward pass               	|  0.0097244      	|  8000           	|  77.795         	|  12.907         	|
+|  merging weights            	|  0.041278       	|  1000           	|  41.278         	|  6.8486         	|
+|  construct the wrapped model	|  5.9867         	|  1              	|  5.9867         	|  0.99328        	|
+|  optimizer step             	|  0.00056966     	|  1000           	|  0.56966        	|  0.094516       	|
+----------------------------------------------------------------------------------------------------------------------------------
+
+fusion_bench method=wemoe/weight_ensembling_moe method.name=clip_weight_ensembling_moe method.use_grad_accumulate=true fast_dev_run=false modelpool=CLIPVisionModelPool/clip-vit-base-patch32_TA8 taskpool=CLIPVisionModelTaskPool/clip-vit-classification_TA8
+--------------------------------------------------------------------------------------------------------------------------
+|  Action              	|  Mean duration (s)	|  Num calls      	|  Total time (s) 	|  Percentage %   	|
+--------------------------------------------------------------------------------------------------------------------------
+|  Total               	|  -              	|  25001          	|  432.52         	|  100 %          	|
+--------------------------------------------------------------------------------------------------------------------------
+|  test-time adaptation	|  426.33         	|  1              	|  426.33         	|  98.568         	|
+|  backward pass       	|  0.020748       	|  8000           	|  165.99         	|  38.377         	|
+|  forward pass        	|  0.018755       	|  8000           	|  150.04         	|  34.689         	|
+|  data time           	|  0.013218       	|  8000           	|  105.74         	|  24.448         	|
+|  optimizer step      	|  0.0012615      	|  1000           	|  1.2615         	|  0.29165        	|
+--------------------------------------------------------------------------------------------------------------------------
+
+fusion_bench method=rankone_wemoe/rankone_wemoe method.name=rankone_wemoe method.rank_k=64 method.select_k=512 method.use_grad_accumulate=true modelpool=CLIPVisionModelPool/clip-vit-base-patch32_TA8 taskpool=CLIPVisionModelTaskPool/clip-vit-classification_TA8
+--------------------------------------------------------------------------------------------------------------------------
+|  Action              	|  Mean duration (s)	|  Num calls      	|  Total time (s) 	|  Percentage %   	|
+--------------------------------------------------------------------------------------------------------------------------
+|  Total               	|  -              	|  25001          	|  537.77         	|  100 %          	|
+--------------------------------------------------------------------------------------------------------------------------
+|  test-time adaptation	|  493.99         	|  1              	|  493.99         	|  91.858         	|
+|  forward pass        	|  0.029664       	|  8000           	|  237.31         	|  44.129         	|
+|  backward pass       	|  0.020244       	|  8000           	|  161.95         	|  30.115         	|
+|  data time           	|  0.011179       	|  8000           	|  89.432         	|  16.63          	|
+|  optimizer step      	|  0.00089799     	|  1000           	|  0.89799        	|  0.16698        	|
+--------------------------------------------------------------------------------------------------------------------------

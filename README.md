@@ -24,7 +24,7 @@ pip install -e . # install the package in editable mode
 
 ## 运行实验
 
-> 注意：本项目涉及到的所有数据集和模型权重均可在代码运行时自动下载，请确保您的网络能访问[huggingface](https://huggingface.co/)网站，您也可以考虑手动下载[相关资源](https://huhuggingface.co/tanganke).
+> 注意：本项目涉及到的所有数据集和模型权重均可在代码运行时自动下载，请确保您的网络能访问[huggingface](https://huggingface.co/)网站，您也可以考虑手动下载[相关资源](https://huggingface.co/tanganke).
 
 
 - 实验：我们的RankOne-MoE方法在CLIP-ViT-B/32, CLIP-ViT-B/16, CLIP-ViT-L/14模型下的合并性能
@@ -41,7 +41,7 @@ bash examples/rankone_weone/rankone_wemoe_gridsearch.sh
 ```bash
 bash examples/rankone_weone/baseline_b32.sh
 ```
-> 运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
+> ViT-B/32的运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
 
 - 实验：基线方法们在CLIP-ViT-B/16模型下的合并性能
 ```bash

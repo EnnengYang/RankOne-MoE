@@ -5,12 +5,12 @@
 
 第一步：创建一个Conda环境
 ```bash
-conda create --name fusionbench python=3.12.4
+conda create --name rankone-moe python=3.12.4
 ```
 
 第二步：激活Conda环境
 ```bash
-conda activate fusionbench
+conda activate rankone-moe
 ```
 
 第三步：安装本项目的依赖的环境

@@ -23,7 +23,7 @@ dependencies = [
     "rich",
     "scipy",
     "h5py",
-    "pytest"
+    "pytest",
 ]
 keywords = ["deep learning", "model fusion", "benchmark"]
 

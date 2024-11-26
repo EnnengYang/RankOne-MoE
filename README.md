@@ -15,8 +15,8 @@ conda activate rankone-moe
 
 第三步：安装本项目的依赖的环境
 ```bash
-git clone https://github.com/EnnengYang/RankOne-WEMoE
-cd RankOne-WEMoE
+git clone https://github.com/EnnengYang/RankOne-MoE
+cd RankOne-MoE
 
 pip install -e . # install the package in editable mode
 ```

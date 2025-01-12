@@ -28,7 +28,7 @@ pip install -e . # install the package in editable mode
 
 <br>
 
-- 实验：我们的RankOne-MoE方法在CLIP-ViT-B/32, CLIP-ViT-B/16, CLIP-ViT-L/14模型下的合并性能(8个任务)
+- 实验：我们的RankOne-MoE方法在CLIP-ViT-B/32, CLIP-ViT-B/16, CLIP-ViT-L/14模型下的合并性能
 ```bash
 bash examples/rankone_one/rankone_moe_gridsearch.sh
 ```

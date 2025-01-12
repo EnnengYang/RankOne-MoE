@@ -37,7 +37,6 @@ sns.set_theme(style="darkgrid")
 color_palette = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
 # sns.set_palette("bright")
 
-# 设置全局字体为 Times New Roman
 plt.rcParams["font.family"] = "Times New Roman"
 plt.rcParams["mathtext.fontset"] = "stix"
 

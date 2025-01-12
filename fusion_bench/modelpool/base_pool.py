@@ -171,6 +171,7 @@ class BaseModelPool(BaseYAMLSerializableModel):
                 if isinstance(model_name_or_config, str)
                 else model_name_or_config
             )
+            print(model_config)
             model = instantiate(model_config, *args, **kwargs)
         elif isinstance(self._models, Dict) and isinstance(model_name_or_config, str):
             model = self._models[model_name_or_config]

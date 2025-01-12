@@ -2,13 +2,16 @@ import json
 import logging
 import os
 from typing import Callable, Dict, Iterable, Optional, Union  # noqa: F401
+import time
+from contextlib import contextmanager
+import gc
 
 import lightning as L
 from lightning.fabric.utilities.rank_zero import rank_zero_only
 from omegaconf import DictConfig, OmegaConf
 from torch import nn
 from tqdm.auto import tqdm
-
+import torch
 import fusion_bench.utils.instantiate
 from fusion_bench.method import BaseAlgorithm
 from fusion_bench.mixins import LightningFabricMixin
@@ -22,6 +25,13 @@ from fusion_bench.utils.rich_utils import print_bordered, print_config_tree
 
 log = logging.getLogger(__name__)
 
+import torch
+from torch.profiler import profile, ProfilerActivity
+def log_peak_gpu_memory():
+    peak_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 2)  # Convert to MB
+    peak_memory_reserved = torch.cuda.max_memory_reserved() / (1024 ** 2)  # Convert to MB
+    log.info(f"Peak GPU Memory Allocated: {peak_memory_allocated:.2f} MB")
+    log.info(f"Peak GPU Memory Reserved: {peak_memory_reserved:.2f} MB")
 
 class FabricModelFusionProgram(
     LightningFabricMixin,
@@ -230,10 +240,42 @@ class FabricModelFusionProgram(
                 compat_load_fn="fusion_bench.compat.taskpool.load_taskpool_from_config",
             )
 
+        torch.cuda.reset_peak_memory_stats()
+        gc.collect()
+        torch.cuda.empty_cache()
+
+        # with profile(
+        #         activities=[ProfilerActivity.CUDA],
+        #         profile_memory=True
+        # ) as prof:
+        start_time = time.time()
         merged_model = self.method.run(self.modelpool)
+        end_time = time.time()
+        execution_time_minutes = (end_time - start_time) / 60
+        log.info(f"Merging Stage Execution time: {execution_time_minutes:.2f} minutes")
+        log_peak_gpu_memory()
+        # log.info(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
+
         self.save_merged_model(merged_model)
+
+        gc.collect()
+        torch.cuda.empty_cache()
+        torch.cuda.reset_peak_memory_stats()
+
         if self.taskpool is not None:
+
+            # with profile(
+            #         activities=[ProfilerActivity.CUDA],
+            #         profile_memory=True
+            # ) as prof:
+            start_time = time.time()
             report = self.evaluate_merged_model(self.taskpool, merged_model)
+            end_time = time.time()
+            execution_time_minutes = (end_time - start_time) / 60
+            log.info(f"Evaluation Stage Execution time: {execution_time_minutes:.2f} minutes")
+            log_peak_gpu_memory()
+            # log.info(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
+
             print_json(report, print_type=False)
             if self.report_save_path is not None:
                 # save report (Dict) to a file

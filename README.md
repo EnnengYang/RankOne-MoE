@@ -28,36 +28,48 @@ pip install -e . # install the package in editable mode
 
 <br>
 
-- 实验：我们的RankOne-MoE方法在CLIP-ViT-B/32, CLIP-ViT-B/16, CLIP-ViT-L/14模型下的合并性能
+- 实验：我们的RankOne-MoE方法在CLIP-ViT-B/32, CLIP-ViT-B/16, CLIP-ViT-L/14模型下的合并性能(8个任务)
 ```bash
-bash examples/rankone_weone/rankone_wemoe_gridsearch.sh
+bash examples/rankone_one/rankone_moe_gridsearch.sh
 ```
-> ViT-B/32的运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
+> ViT-B/32(8个任务)的运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
 
-> ViT-B/16的运行结果在[examples/results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
+> ViT-B/16(8个任务)的运行结果在[examples/results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
 
-> ViT-L/14的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
+> ViT-L/14(8个任务)的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
 
 <br>
 
-- 实验：基线方法们在CLIP-ViT-B/32模型下的合并性能
+
+- 实验：基线方法们在CLIP-ViT-B/32模型下的合并性能(8个任务)
 ```bash
-bash examples/rankone_weone/baseline_b32.sh
+bash examples/rankone_one/baseline_b32.sh
 ```
-> ViT-B/32的运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
+> ViT-B/32(8个任务)的运行结果在[examples/results/clip-vit-base-patch32](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32)
 
 <br>
 
-- 实验：基线方法们在CLIP-ViT-B/16模型下的合并性能
+- 实验：基线方法们在CLIP-ViT-B/16模型下的合并性能(8个任务)
 ```bash
-bash examples/rankone_weone/baseline_b16.sh
+bash examples/rankone_one/baseline_b16.sh
 ```
->  ViT-B/16的运行结果在[examples/results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
+>  ViT-B/16(8个任务)的运行结果在[examples/results/clip-vit-base-patch16](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch16)
 
 <br>
 
-- 实验：基线方法们在CLIP-ViT-L/14模型下的合并性能
+- 实验：基线方法们在CLIP-ViT-L/14模型下的合并性能(8个任务)
 ```bash
-bash examples/rankone_weone/baseline_l14.sh
+bash examples/rankone_one/baseline_l14.sh
 ```
-> ViT-L/14的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
+> ViT-L/14(8个任务)的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
+
+<br>
+
+
+- 实验：所有对比方法们在CLIP-ViT-B/32模型下的合并性能(20个任务)
+```bash
+bash examples/rankone_one/baseline_b32_20tasks.sh
+```
+> ViT-B/32(20个任务)的运行结果在[examples/results/clip-vit-base-patch32_20Tasks](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32_20Tasks)
+
+<br>

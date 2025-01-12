@@ -211,7 +211,7 @@ class RankOneWeightEnsemblingMoEAlgorithm(ModelFusionAlgorithm):
 
     def run(self, modelpool: ModelPool):
         """
-        Run the RankOneWeightEnsemblingMoEAlgorithm to fuse models using Weight Ensembling Mixture of Experts.
+        Run the RankOneWeightEnsemblingMoEAlgorithm to fuse models using RankOne-MoE.
 
         Args:
             modelpool (ModelPool): The pool of models to be fused.
@@ -219,10 +219,10 @@ class RankOneWeightEnsemblingMoEAlgorithm(ModelFusionAlgorithm):
         Returns:
             RankOneWeightEnsemblingMoE: The fused RankOne MoE model.
         """
-        log.info("Fusing models using WeightEnsembling Mixture of Experts modules.")
+        log.info("Fusing models using RankOne-MoE modules.")
         self.modelpool = modelpool
 
-        with timeit_context("upscaling models to a rank-one weight-ensembling MoE model"):
+        with timeit_context("upscaling models to a RankOne-MoE model"):
             moe_model = self.construct_moe_model()
             print_parameters(moe_model)
 

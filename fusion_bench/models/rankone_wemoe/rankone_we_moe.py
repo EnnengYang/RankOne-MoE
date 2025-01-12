@@ -221,7 +221,8 @@ class RankOneWeightEnsemblingMoE(nn.Module):
 
         self.gate = construct_rankone_weight_ensembling_gate(
             hidden_size=hidden_size,
-            num_experts=int(self.num_experts * self.rank_k),
+            num_experts=int(self.num_experts * self.rank_k), # if rank-1 wise merging weights
+            # num_experts=int(self.num_experts), # if rank-k wise merging weights
             init_lambda=init_lambda,
             num_hidden_layers=router_hidden_layers,
         )
@@ -245,24 +246,6 @@ class RankOneWeightEnsemblingMoE(nn.Module):
         # task vecotr  (only bias term)
         self.task_vectors_fc1_bias = nn.Parameter(torch.stack([e.fc1.bias for e in expert_models], dim=0), requires_grad=False)
         self.task_vectors_fc2_bias = nn.Parameter(torch.stack([e.fc2.bias for e in expert_models], dim=0), requires_grad=False)
-
-        # SVD representation of task vector (only weight term)
-
-        # svd_cache_list_1 = fun_joint_svd([m.fc1.weight for m in expert_models], accelerator=self.svd_accelerator)
-        # u, s, v = svd_cache_list_1[0]
-        # self.task_vectors_fc1_u = nn.Parameter(u[:, :self.rank_k], requires_grad=False)
-        # self.task_vectors_fc1_svh1 = nn.Parameter(s[:self.rank_k] * v[:, :self.rank_k], requires_grad=False)
-        #
-        # u, s, v = svd_cache_list_1[1]
-        # self.task_vectors_fc1_svh2 = nn.Parameter(s[:self.rank_k] * v[:, :self.rank_k], requires_grad=False)
-        #
-        # svd_cache_list_2 = fun_joint_svd([m.fc2.weight for m in expert_models], accelerator=self.svd_accelerator)
-        # u, s, v = svd_cache_list_2[0]
-        # self.task_vectors_fc2_u = nn.Parameter(u[:, :self.rank_k], requires_grad=False)
-        # self.task_vectors_fc2_svh1 = nn.Parameter(s[:self.rank_k] * v[:, :self.rank_k], requires_grad=False)
-        #
-        # u, s, v = svd_cache_list_2[1]
-        # self.task_vectors_fc2_svh2 = nn.Parameter(s[:self.rank_k] * v[:, :self.rank_k], requires_grad=False)
 
         # SVD representation of task vector (only weight term)
         self.task_vectors_fc1_u = nn.ParameterList()
@@ -290,37 +273,6 @@ class RankOneWeightEnsemblingMoE(nn.Module):
                         self.task_vectors_fc2_u.append(nn.Parameter(u.T, requires_grad=False))
                         self.task_vectors_fc2_svh.append(nn.Parameter((s * v).T, requires_grad=False))
 
-        # SVD representation of task vector (only weight term)
-        # self.task_vectors_fc1_u = []
-        # self.task_vectors_fc1_svh = []
-        # self.task_vectors_fc2_u = []
-        # self.task_vectors_fc2_svh = []
-        #
-        # for m in expert_models:
-        #     for name, param in m.named_parameters():
-        #         if '.weight' in name:
-        #
-        #             if _is_all_zeros(param):
-        #                 # All fine-tuned models are identical to the pretrained model
-        #                 raise ExpertNotTrainedError()
-        #
-        #             u, s, v = svd(param, accelerator=self.svd_accelerator)
-        #             u = u[:, :self.rank_k]
-        #             s = s[:self.rank_k]
-        #             v = v[:, :self.rank_k]
-        #
-        #             if 'fc1.weight' == name:
-        #                 self.task_vectors_fc1_u.append(u.T)
-        #                 self.task_vectors_fc1_svh.append((s * v).T)
-        #             elif 'fc2.weight' == name:
-        #                 self.task_vectors_fc2_u.append(u.T)
-        #                 self.task_vectors_fc2_svh.append((s * v).T)
-        #
-        # self.task_vectors_fc1_u = nn.Parameter(torch.concat(self.task_vectors_fc1_u, dim=0), requires_grad=False)
-        # self.task_vectors_fc1_svh = nn.Parameter(torch.concat(self.task_vectors_fc1_svh, dim=0), requires_grad=False)
-        # self.task_vectors_fc2_u = nn.Parameter(torch.concat(self.task_vectors_fc2_u, dim=0), requires_grad=False)
-        # self.task_vectors_fc2_svh = nn.Parameter(torch.concat(self.task_vectors_fc2_svh, dim=0), requires_grad=False)
-
         # remove the original module from fine-tuned models to save memory
         for name, param in base_model.named_parameters():
             name_list = name.split(".")
@@ -332,19 +284,6 @@ class RankOneWeightEnsemblingMoE(nn.Module):
         return functools.partial(
             functional_call, self.base_model, self._merged_state_dict,
         )
-
-    # def merge_weights_optimized(self, gate_weights, fc1_u, fc1_svh):
-    #     if gate_weights.dim() == 1:
-    #         gate_weights = gate_weights.unsqueeze(1)
-    #
-    #     fc1_u = fc1_u.unsqueeze(2) #  fc1_u: (64, 3072) -> (64, 3072, 1)
-    #     fc1_svh = fc1_svh.unsqueeze(1) # fc1_svh: (64, 768) -> (64, 1, 768)
-    #     gate_weights = gate_weights.unsqueeze(2) # gate_weights: (64, 1) -> (64, 1, 1)
-    #
-    #     weighted_task_matrices = torch.bmm(fc1_u, fc1_svh)  # (64, 3072, 768)
-    #     weighted_task_matrices = gate_weights * weighted_task_matrices
-    #     aggregated_weights = weighted_task_matrices.sum(dim=0)  # (3072, 768)
-    #     return aggregated_weights
 
     def top_k_soft(self, s, k):
         threshold, _ = torch.topk(s, k, largest=True, sorted=False)
@@ -372,41 +311,24 @@ class RankOneWeightEnsemblingMoE(nn.Module):
             elif name == 'fc1.weight':
                 w_list = torch.split(expert_weights, int(expert_weights.size(-1) / self.num_experts), dim=-1)
                 for weight, u, svh in zip(w_list, self.task_vectors_fc1_u, self.task_vectors_fc1_svh):
+
+                    # weight_u = u * weight  # if rank-k wise merging weights
+
                     weight_diag = torch.diag(weight)
                     weight_u = torch.mm(weight_diag, u)
                     result = torch.matmul(weight_u.T, svh)
                     state_dict[name] = state_dict[name] + result
-
-                # for weight, u, svh in zip(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh):
-                #     state_dict[name] = state_dict[name] + weight * torch.ger(u, svh)
-
-                # state_dict[name] += self.merge_weights_optimized(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh)
-
-                # aggregated_weights = torch.zeros_like(state_dict[name])  # (3072, 768)
-                # for weight, u, svh in zip(expert_weights, self.task_vectors_fc1_u, self.task_vectors_fc1_svh):
-                #     if weight > 0:
-                #         aggregated_weights.add_(weight * torch.mm(u.unsqueeze(1), svh.unsqueeze(0)))
-                #     torch.cuda.empty_cache()
-                # state_dict[name].add_(aggregated_weights)
 
             elif name == 'fc2.weight':
                 w_list = torch.split(expert_weights, int(expert_weights.size(-1) / self.num_experts), dim=-1)
                 for weight, u, svh in zip(w_list, self.task_vectors_fc2_u, self.task_vectors_fc2_svh):
+
+                    # weight_u = u * weight  # rank-k wise merging weights
+
                     weight_diag = torch.diag(weight)
                     weight_u = torch.mm(weight_diag, u)
                     result = torch.matmul(weight_u.T, svh)
                     state_dict[name] = state_dict[name] + result
-
-                # for weight, u, svh in zip(expert_weights, self.task_vectors_fc2_u, self.task_vectors_fc2_svh):
-                #     state_dict[name] = state_dict[name] + weight * torch.ger(u, svh)
-
-                # state_dict[name] += self.merge_weights_optimized(expert_weights, self.task_vectors_fc2_u,  self.task_vectors_fc2_svh)
-
-                # aggregated_weights = torch.zeros_like(state_dict[name])  # (3072, 768)
-                # for weight, u, svh in zip(expert_weights, self.task_vectors_fc2_u, self.task_vectors_fc2_svh):
-                #     if weight > 0:
-                #         aggregated_weights.add_(weight * torch.mm(u.unsqueeze(1), svh.unsqueeze(0)))
-                # state_dict[name].add_(aggregated_weights)
 
         self._merged_state_dict = state_dict
         return state_dict

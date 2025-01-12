@@ -38,6 +38,8 @@ bash examples/rankone_one/rankone_moe_gridsearch.sh
 
 > ViT-L/14(8个任务)的运行结果在[examples/results/clip-vit-large-patch14](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-large-patch14)
 
+> ViT-B/32(20个任务)的运行结果在[examples/results/clip-vit-base-patch32_20Tasks](https://github.com/EnnengYang/RankOne-MoE/tree/main/examples/results/clip-vit-base-patch32_20Tasks)
+
 <br>
 
 
@@ -66,7 +68,7 @@ bash examples/rankone_one/baseline_l14.sh
 <br>
 
 
-- 实验：所有对比方法们在CLIP-ViT-B/32模型下的合并性能(20个任务)
+- 实验：基线方法们在CLIP-ViT-B/32模型下的合并性能(20个任务)
 ```bash
 bash examples/rankone_one/baseline_b32_20tasks.sh
 ```
